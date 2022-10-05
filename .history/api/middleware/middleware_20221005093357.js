@@ -12,44 +12,25 @@ next()
  async function validateUserId(req, res, next) {
   // DO YOUR MAGIC
   try{
-    const user = await User.getById(req.params.id)
-    if(!user) {
-      res.status(404).json({ message: "user not found" });
-    } else{
-      req.user = user;
+    const user = await User.findById(req.params.id)
+    if(user) {
+      req.hub = hub;
       next()
+    } else{
+      res.status(404).json({ message: "user not found" });
     }
   } catch (err){
-     res.status(500).json({message: "problem finding user"})
+     req.status(400).json({message: "not sure what happened"})
   }
 }
 
 function validateUser(req, res, next) {
   // DO YOUR MAGIC
-  const { name } = req.body;
-  if (
-    name !== undefined && typeof name === 'string' && name.length
-  ){
-    req.name = name.trim()
-    next()
-  }else {
-    res.status(400).json({message: "missing required name field"})
-  }
 }
 
 function validatePost(req, res, next) {
   // DO YOUR MAGIC
-  const { text } = req.body;
-  if (
-    !text || !text.trim()
-  ){
-    res.status(400).json({message: "missing required text field"})
-  }else {
-    req.text = text.trim()
-    next()
-  }
 }
-
 
 // do not forget to expose these functions to other modules
 module.exports = {

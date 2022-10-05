@@ -41,12 +41,12 @@ function validatePost(req, res, next) {
   // DO YOUR MAGIC
   const { text } = req.body;
   if (
-    !text || !text.trim()
+    text !== undefined &&  text.trim() !== undefined
   ){
-    res.status(400).json({message: "missing required text field"})
-  }else {
     req.text = text.trim()
     next()
+  }else {
+    res.status(400).json({message: "missing required text field"})
   }
 }
 

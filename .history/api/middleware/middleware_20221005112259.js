@@ -39,14 +39,14 @@ function validateUser(req, res, next) {
 
 function validatePost(req, res, next) {
   // DO YOUR MAGIC
-  const { text } = req.body;
+  const { post } = req.body;
   if (
-    !text || !text.trim()
+    post !== undefined && typeof post === 'string' && post.length
   ){
-    res.status(400).json({message: "missing required text field"})
-  }else {
     req.text = text.trim()
     next()
+  }else {
+    res.status(400).json({message: "missing required text field"})
   }
 }
 

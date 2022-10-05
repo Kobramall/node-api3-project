@@ -12,15 +12,15 @@ next()
  async function validateUserId(req, res, next) {
   // DO YOUR MAGIC
   try{
-    const user = await User.getById(req.params.id)
-    if(!user) {
-      res.status(404).json({ message: "user not found" });
-    } else{
+    const user = await User.findById(req.params.id)
+    if(user) {
       req.user = user;
       next()
+    } else{
+      res.status(404).json({ message: "user not found" });
     }
   } catch (err){
-     res.status(500).json({message: "problem finding user"})
+     req.status(500).json({message: "problem finding user"})
   }
 }
 
@@ -39,14 +39,14 @@ function validateUser(req, res, next) {
 
 function validatePost(req, res, next) {
   // DO YOUR MAGIC
-  const { text } = req.body;
+  const { post } = req.body;
   if (
-    !text || !text.trim()
+    post !== undefined && typeof post === 'string' && post.length
   ){
-    res.status(400).json({message: "missing required text field"})
-  }else {
     req.text = text.trim()
     next()
+  }else {
+    res.status(400).json({message: "missing required text field"})
   }
 }
 
